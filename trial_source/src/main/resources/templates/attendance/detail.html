@@ -6,7 +6,9 @@
 <title>勤怠情報変更｜LMS</title>
 </head>
 <body>
-
+	
+	<div th:if="${notEnterFlag}" id="notEnterFlag"></div>
+	
 	<!-- 完了メッセージ -->
 	<th:block th:if="${not #strings.isEmpty(message)}" id="message">
 		<div class="alert alert-info alert-dismissible fade in" role="alert">
@@ -86,6 +88,13 @@
 			const minutes = ('0' + today.getMinutes()).slice(-2);
 			return hours + ':' + minutes;
 		}
+		
+		window.addEventListener('DOMContentLoaded',() =>{
+			const terget=document.getElementById('notEnterFlag');
+			if(terget){
+				alert('過去日の勤怠に未入力があります。');
+			}
+		});
 	</script>
 
 </body>
