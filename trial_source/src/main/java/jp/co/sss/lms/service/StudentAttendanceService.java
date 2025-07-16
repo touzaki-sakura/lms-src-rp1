@@ -72,6 +72,12 @@ public class StudentAttendanceService {
 
 		return attendanceManagementDtoList;
 	}
+	
+	public boolean notEnterCount(Integer lmsUserId) {
+		Date trainingDate = attendanceUtil.getTrainingDate();
+		Integer count = tStudentAttendanceMapper.notEnterCount(lmsUserId,  Constants.DB_FLG_FALSE, trainingDate);
+		return count > 0;
+	}
 
 	/**
 	 * 出退勤更新前のチェック

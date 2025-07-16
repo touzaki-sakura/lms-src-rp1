@@ -51,7 +51,7 @@ public interface TStudentAttendanceMapper {
 
 	/**
 	 * 勤怠情報（受講生入力）登録
-	 * 
+	 * ;
 	 * @param tStudentAttendance
 	 * @return 登録結果
 	 */
@@ -65,4 +65,6 @@ public interface TStudentAttendanceMapper {
 	 */
 	Boolean update(TStudentAttendance tStudentAttendance);
 
+	
+	Integer notEnterCount(@Param("lmsUserId") Integer lmsUserId, @Param("deleteFlg") Short deleteFlg,@Param("trainingDate") Date trainingDate);
 }

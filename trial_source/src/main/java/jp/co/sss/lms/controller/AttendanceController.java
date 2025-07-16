@@ -46,7 +46,10 @@ public class AttendanceController {
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
-
+		
+		//未入力日の確認
+		boolean notEnterFlag = studentAttendanceService.notEnterCount(loginUserDto.getLmsUserId());
+		model.addAttribute("notEnterFlag", notEnterFlag);
 		return "attendance/detail";
 	}
 
