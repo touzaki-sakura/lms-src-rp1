@@ -86,6 +86,16 @@ public class AttendanceUtil {
 		return total;
 	}
 
+	public String calcTimeHour(String time) {
+		String hour = time.substring(0,1);
+		return hour;
+	}
+	
+	public String calcTimeMinute(String time) {
+		String minute = time.substring(3,4);
+		return minute;
+	}
+	
 	/**
 	 * 時刻分を丸めた本日日付を取得
 	 * 
@@ -132,6 +142,41 @@ public class AttendanceUtil {
 		return map;
 	}
 
+	
+	public LinkedHashMap<Integer, String> setTimeHour(){
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null,"");
+		
+		for(int i = 1; i <= 23; i++) {
+			String hour = null;
+			if(i < 10) {
+				hour = "0" + i;
+			}else {
+				hour = "" + i;
+			}
+			map.put(i, hour);
+		}
+		
+		return map;
+	}
+	
+	public LinkedHashMap<Integer, String> setTimeMinute(){
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null,"");
+		
+		for(int i = 1; i <= 60; i++) {
+			String minute = null;
+			if(i < 10) {
+				minute = "0" + i;
+			}else {
+				minute = "" + i;
+			}
+			map.put(i, minute);
+		}
+		
+		return map;
+	}
+	
 	/**
 	 * 研修日の判定
 	 * 

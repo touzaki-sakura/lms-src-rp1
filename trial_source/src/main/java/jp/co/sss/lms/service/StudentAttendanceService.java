@@ -72,10 +72,10 @@ public class StudentAttendanceService {
 
 		return attendanceManagementDtoList;
 	}
-	
+
 	public boolean notEnterCount(Integer lmsUserId) {
 		Date trainingDate = attendanceUtil.getTrainingDate();
-		Integer count = tStudentAttendanceMapper.notEnterCount(lmsUserId,  Constants.DB_FLG_FALSE, trainingDate);
+		Integer count = tStudentAttendanceMapper.notEnterCount(lmsUserId, Constants.DB_FLG_FALSE, trainingDate);
 		return count > 0;
 	}
 
@@ -224,6 +224,8 @@ public class StudentAttendanceService {
 		attendanceForm.setLmsUserId(loginUserDto.getLmsUserId());
 		attendanceForm.setUserName(loginUserDto.getUserName());
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
+		attendanceForm.setTimeHour(attendanceUtil.setTimeHour());
+		attendanceForm.setTimeMinute(attendanceUtil.setTimeMinute());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
 
 		// 途中退校している場合のみ設定
@@ -241,9 +243,22 @@ public class StudentAttendanceService {
 					.setStudentAttendanceId(attendanceManagementDto.getStudentAttendanceId());
 			dailyAttendanceForm
 					.setTrainingDate(dateUtil.toString(attendanceManagementDto.getTrainingDate()));
-			dailyAttendanceForm
-					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
-			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+
+			//どうにかここでutilを利用して時間をつける
+			if (attendanceManagementDto.getTrainingStartTime() != null) {
+				dailyAttendanceForm.setTrainingStartTimeHour(
+						attendanceUtil.calcTimeHour(attendanceManagementDto.getTrainingStartTime()));
+				dailyAttendanceForm.setTrainingStartTimeMinute(
+						attendanceUtil.calcTimeMinute(attendanceManagementDto.getTrainingStartTime()));
+			}
+
+			if (attendanceManagementDto.getTrainingEndTime() != null) {
+				dailyAttendanceForm.setTrainingEndTimeHour(
+						attendanceUtil.calcTimeHour(attendanceManagementDto.getTrainingEndTime()));
+				dailyAttendanceForm.setTrainingEndTimeMinute(
+						attendanceUtil.calcTimeMinute(attendanceManagementDto.getTrainingEndTime()));
+			}
+
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
@@ -301,10 +316,16 @@ public class StudentAttendanceService {
 			tStudentAttendance.setAccountId(loginUserDto.getAccountId());
 			// 出勤時刻整形
 			TrainingTime trainingStartTime = null;
+			String startTime = dailyAttendanceForm.getTrainingStartTimeHour() + ":"
+					+ dailyAttendanceForm.getTrainingStartTimeMinute();
+			dailyAttendanceForm.setTrainingStartTime(startTime);
 			trainingStartTime = new TrainingTime(dailyAttendanceForm.getTrainingStartTime());
 			tStudentAttendance.setTrainingStartTime(trainingStartTime.getFormattedString());
 			// 退勤時刻整形
 			TrainingTime trainingEndTime = null;
+			String endTime = dailyAttendanceForm.getTrainingEndTimeHour() + ":"
+					+ dailyAttendanceForm.getTrainingEndTimeMinute();
+			dailyAttendanceForm.setTrainingEndTime(endTime);
 			trainingEndTime = new TrainingTime(dailyAttendanceForm.getTrainingEndTime());
 			tStudentAttendance.setTrainingEndTime(trainingEndTime.getFormattedString());
 			// 中抜け時間
