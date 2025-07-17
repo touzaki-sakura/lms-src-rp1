@@ -86,16 +86,26 @@ public class AttendanceUtil {
 		return total;
 	}
 
-	public String calcTimeHour(String time) {
-		String hour = time.substring(0,1);
+	public Integer calcTimeHour(String time) {
+		Integer hour = Integer.parseInt(time.substring(0,2));
 		return hour;
 	}
 	
-	public String calcTimeMinute(String time) {
-		String minute = time.substring(3,4);
+	public Integer calcTimeMinute(String time) {
+		Integer minute = Integer.parseInt(time.substring(3,5));
 		return minute;
 	}
 	
+	
+	public String timeToString(Integer time) {
+		String strTime;
+		if(time < 10) {
+			strTime = "0" + time;
+		}else {
+			strTime = time.toString();
+		}
+		return strTime;
+	}
 	/**
 	 * 時刻分を丸めた本日日付を取得
 	 * 
@@ -147,7 +157,7 @@ public class AttendanceUtil {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
 		map.put(null,"");
 		
-		for(int i = 1; i <= 23; i++) {
+		for(int i = 0; i <= 23; i++) {
 			String hour = null;
 			if(i < 10) {
 				hour = "0" + i;
@@ -164,7 +174,7 @@ public class AttendanceUtil {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
 		map.put(null,"");
 		
-		for(int i = 1; i <= 60; i++) {
+		for(int i = 0; i < 60; i++) {
 			String minute = null;
 			if(i < 10) {
 				minute = "0" + i;
