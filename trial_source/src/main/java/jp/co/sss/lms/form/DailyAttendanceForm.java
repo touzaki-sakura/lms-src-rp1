@@ -36,7 +36,7 @@ public class DailyAttendanceForm {
 	/** ステータス */
 	private String status;
 	/** 備考 
-	 *  最大文字数 100文字以下
+	 *  最大文字数 100文字以下 
 	 */
 	@Size(max=100)
 	private String note;
