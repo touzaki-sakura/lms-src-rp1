@@ -250,7 +250,7 @@ public class StudentAttendanceService {
 			dailyAttendanceForm
 					.setTrainingDate(dateUtil.toString(attendanceManagementDto.getTrainingDate()));
 
-			//どうにかここでutilを利用して時間をつける
+			//勤怠時間を時間と分に分けて代入する
 			if (attendanceManagementDto.getTrainingStartTime() != null && attendanceManagementDto.getTrainingStartTime().length() != 0) {
 				dailyAttendanceForm.setTrainingStartTimeHour(
 						attendanceUtil.calcTimeHour(attendanceManagementDto.getTrainingStartTime()));
@@ -258,6 +258,7 @@ public class StudentAttendanceService {
 						attendanceUtil.calcTimeMinute(attendanceManagementDto.getTrainingStartTime()));
 			}
 
+			//勤怠時間を時間と分に分けて代入する
 			if (attendanceManagementDto.getTrainingEndTime() != null && attendanceManagementDto.getTrainingEndTime().length() != 0) {
 				dailyAttendanceForm.setTrainingEndTimeHour(
 						attendanceUtil.calcTimeHour(attendanceManagementDto.getTrainingEndTime()));

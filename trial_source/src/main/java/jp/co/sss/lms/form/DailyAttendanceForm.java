@@ -18,15 +18,15 @@ public class DailyAttendanceForm {
 	private String trainingDate;
 	/** 出勤時間 */
 	private String trainingStartTime;
-	/** 出勤時間・時 */
+	/** 出勤時間・時(数値型) */
 	private Integer trainingStartTimeHour;
-	/** 出勤時間・分 */
+	/** 出勤時間・分(数値型) */
 	private Integer trainingStartTimeMinute;
 	/** 退勤時間 */
 	private String trainingEndTime;
-	/** 退勤時間・時 */
+	/** 退勤時間・時(数値型) */
 	private Integer trainingEndTimeHour;
-	/** 退勤時間・分 */
+	/** 退勤時間・分(数値型) */
 	private Integer trainingEndTimeMinute;
 	/** 中抜け時間 */
 	private Integer blankTime;

@@ -86,17 +86,34 @@ public class AttendanceUtil {
 		return total;
 	}
 
+	/**
+	 * 時間だけ切り取る
+	 * 
+	 * @param time
+	 * @return 時間(数値型)
+	 */
 	public Integer calcTimeHour(String time) {
 		Integer hour = Integer.parseInt(time.substring(0,2));
 		return hour;
 	}
 	
+	/**
+	 * 分だけ切り取る
+	 * 
+	 * @param time
+	 * @return 分(数値型)
+	 */
 	public Integer calcTimeMinute(String time) {
 		Integer minute = Integer.parseInt(time.substring(3,5));
 		return minute;
 	}
 	
-	
+	/**
+	 * 文字列型に変更
+	 * 
+	 * @param time
+	 * @return timeを文字列に変更
+	 */
 	public String timeToString(Integer time) {
 		String strTime;
 		if(time < 10) {
@@ -152,7 +169,11 @@ public class AttendanceUtil {
 		return map;
 	}
 
-	
+	/**
+	 * 出勤時間取得
+	 * 
+	 * @return 出勤時間リスト
+	 */
 	public LinkedHashMap<Integer, String> setTimeHour(){
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
 		map.put(null,"");
@@ -170,6 +191,11 @@ public class AttendanceUtil {
 		return map;
 	}
 	
+	/**
+	 * 退勤時間取得
+	 * 
+	 * @return 退勤時間リスト
+	 */
 	public LinkedHashMap<Integer, String> setTimeMinute(){
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
 		map.put(null,"");
