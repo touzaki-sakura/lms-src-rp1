@@ -1366,8 +1366,15 @@ body {
 .w70 {
 	width: 125px;
 }
-.w70 .form-control{
+
+.w70 .form-control {
 	width: 65px;
+	margin:10px;
+}
+
+.flexbox {
+	display: flex;
+	flex-direction: row;
 }
 
 .w80 {
