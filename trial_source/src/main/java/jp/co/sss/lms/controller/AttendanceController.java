@@ -133,8 +133,11 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
-	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
+	public String complete(AttendanceForm attendanceForm, BindingResult result, Model model)
 			throws ParseException {
+		//入力チェック
+		
+		
 
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);
