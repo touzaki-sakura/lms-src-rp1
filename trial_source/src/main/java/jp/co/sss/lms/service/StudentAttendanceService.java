@@ -136,59 +136,6 @@ public class StudentAttendanceService {
 	}
 
 	/**
-	 * 出退勤更新前のチェック
-	 * 
-	 * （7/22）エラーをまとめて戻るように設定する必要あり
-	 * 
-	 * @param attendanceType
-	 * @return エラーメッセージ
-	 */
-	public String inputCheck(AttendanceForm attendanceForm) {
-		Date trainingDate = attendanceUtil.getTrainingDate();
-		// 権限チェック
-		if (!loginUserUtil.isStudent()) {
-			return messageUtil.getMessage(Constants.VALID_KEY_AUTHORIZATION);
-		}
-		// 研修日チェック
-		if (!attendanceUtil.isWorkDay(loginUserDto.getCourseId(), trainingDate)) {
-			return messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_NOTWORKDAY);
-		}
-		// 登録情報チェック
-		TStudentAttendance tStudentAttendance = tStudentAttendanceMapper
-				.findByLmsUserIdAndTrainingDate(loginUserDto.getLmsUserId(), trainingDate,
-						Constants.DB_FLG_FALSE);
-
-		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
-			//出勤時間のどちらか一方が未入力の場合
-			if (dailyAttendanceForm.getTrainingStartTimeHour() != 0
-					&& dailyAttendanceForm.getTrainingStartTimeMinute() == 0
-					|| dailyAttendanceForm.getTrainingStartTimeHour() == 0
-					&& dailyAttendanceForm.getTrainingStartTimeMinute() != 0) {
-				return messageUtil.getMessage(Constants.INPUT_INVALID);
-			}
-			//退勤時間のどちらか一方が未入力の場合
-			if (dailyAttendanceForm.getTrainingEndTimeHour() != 0
-					&& dailyAttendanceForm.getTrainingEndTimeMinute() == 0
-					|| dailyAttendanceForm.getTrainingEndTimeHour() == 0
-					&& dailyAttendanceForm.getTrainingEndTimeMinute() != 0) {
-				return messageUtil.getMessage(Constants.INPUT_INVALID);
-			}
-			//退勤時間が入力され、出勤時間が未入力の場合
-			if ((dailyAttendanceForm.getTrainingStartTimeHour() == 0
-					&& dailyAttendanceForm.getTrainingStartTimeMinute() == 0)
-					&& (dailyAttendanceForm.getTrainingEndTimeHour() != 0
-					&& dailyAttendanceForm.getTrainingEndTimeMinute() != 0)) {
-				return messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY);
-			}
-			//退勤時間が出勤時間より時間が大きい場合（7/22 条件が足りない。1分過ぎても判定されるようにする）
-			if (dailyAttendanceForm.getTrainingStartTimeHour() > dailyAttendanceForm.getTrainingEndTimeHour()) {
-				return messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY);
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * 出勤ボタン処理
 	 * 
 	 * @return 完了メッセージ
