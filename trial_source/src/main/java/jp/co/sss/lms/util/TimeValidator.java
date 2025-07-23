@@ -22,7 +22,7 @@ public class TimeValidator implements ConstraintValidator<Time, Object> {
 		this.trainingEndTimeMinute = annotation.fieldTrainingEndTimeMinute();
 	}
 
-	//入力チェック(7/23)
+	//入力チェック(7/23)　
 	@Override
 	public boolean isValid(Object value, ConstraintValidatorContext context) {
 		BeanWrapper beanWrapper = new BeanWrapperImpl(value);
