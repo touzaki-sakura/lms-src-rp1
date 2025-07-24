@@ -136,9 +136,19 @@ public class AttendanceController {
 	public String complete(AttendanceForm attendanceForm, BindingResult result, Model model)
 			throws ParseException {
 		//入力チェック
+		result = studentAttendanceService.inputCheck(attendanceForm, result);
 		
+		if(result.hasErrors()) {
+			// 勤怠管理リストの取得
+			List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
+					.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+			// 勤怠フォームの生成
+			attendanceForm = studentAttendanceService
+					.setAttendanceForm(attendanceManagementDtoList);
+			model.addAttribute("attendanceForm", attendanceForm);
+			return "attendance/update";
+		}
 		
-
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);
 		model.addAttribute("message", message);

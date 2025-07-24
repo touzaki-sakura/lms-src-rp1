@@ -9,6 +9,12 @@ import lombok.Data;
  * @author 東京ITスクール
  */
 @Data
+//@AttendanceUpdate(
+//	    fieldTrainingStartTimeHour = "trainingStartTimeHour",
+//	    fieldTrainingStartTimeMinute = "trainingStartTimeMinute",
+//	    fieldTrainingEndTimeHour = "trainingEndTimeHour",
+//	    fieldTrainingEndTimeMinute = "trainingEndTimeMinute"
+//)
 public class DailyAttendanceForm {
 
 	/** 受講生勤怠ID */
@@ -58,5 +64,4 @@ public class DailyAttendanceForm {
 	private String courseName;
 	/** インデックス */
 	private String index;
-
 }

@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
@@ -133,6 +135,75 @@ public class StudentAttendanceService {
 			break;
 		}
 		return null;
+	}
+
+	/**
+	 * 出退勤更新前のチェック
+	 * 
+	 * （7/22）エラーをまとめて戻るように設定する必要あり
+	 * 
+	 * @param attendanceType
+	 * @return エラーメッセージ
+	 */
+	public BindingResult inputCheck(AttendanceForm attendanceForm, BindingResult result) {
+
+		FieldError error;
+
+		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+			//出勤時間のどちらか一方が未入力の場合
+			if (dailyAttendanceForm.getTrainingStartTimeHour() != null
+					&& dailyAttendanceForm.getTrainingStartTimeMinute() == null
+					|| dailyAttendanceForm.getTrainingStartTimeHour() == null
+							&& dailyAttendanceForm.getTrainingStartTimeMinute() != null) {
+				error = new FieldError(result.getObjectName(), "input.invalid",
+						messageUtil.getMessage(Constants.INPUT_INVALID));
+				result.addError(error);
+			}
+			//退勤時間のどちらか一方が未入力の場合
+			if (dailyAttendanceForm.getTrainingEndTimeHour() != null
+					&& dailyAttendanceForm.getTrainingEndTimeMinute() == null
+					|| dailyAttendanceForm.getTrainingEndTimeHour() == null
+							&& dailyAttendanceForm.getTrainingEndTimeMinute() != null) {
+				error = new FieldError(result.getObjectName(), "input.invalid",
+						messageUtil.getMessage(Constants.INPUT_INVALID));
+				result.addError(error);
+			}
+			//退勤時間が入力され、出勤時間が未入力の場合
+			if ((dailyAttendanceForm.getTrainingStartTimeHour() == null
+					&& dailyAttendanceForm.getTrainingStartTimeMinute() == null)
+					&& (dailyAttendanceForm.getTrainingEndTimeHour() != null
+							&& dailyAttendanceForm.getTrainingEndTimeMinute() != null)) {
+				error = new FieldError(result.getObjectName(), "attendance.punchInEmpty",
+						messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY));
+				result.addError(error);
+			}
+
+			if (dailyAttendanceForm.getTrainingStartTimeHour() != null
+					&& dailyAttendanceForm.getTrainingStartTimeMinute() != null
+					&& dailyAttendanceForm.getTrainingEndTimeHour() != null
+					&& dailyAttendanceForm.getTrainingEndTimeMinute() != null
+					&& dailyAttendanceForm.getBlankTime() != null) {
+				//退勤時間が出勤時間より時間が大きい場合
+				if (dailyAttendanceForm.getTrainingStartTimeHour() >= dailyAttendanceForm.getTrainingEndTimeHour()) {
+					if (dailyAttendanceForm.getTrainingStartTimeMinute() >= dailyAttendanceForm
+							.getTrainingEndTimeMinute()) {
+						error = new FieldError(result.getObjectName(), "attendance.trainingTimeRange",
+								messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE));
+						result.addError(error);
+					}
+				}
+				//勤務時間より中抜け時間が超過している場合
+				if (dailyAttendanceForm.getBlankTime() > (dailyAttendanceForm.getTrainingEndTimeHour() * 60
+						+ dailyAttendanceForm.getTrainingEndTimeMinute())
+						- (dailyAttendanceForm.getTrainingStartTimeHour() * 60
+								+ dailyAttendanceForm.getTrainingStartTimeMinute())) {
+					error = new FieldError(result.getObjectName(), "attendance.blankTimeError",
+							messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_BLANKTIMEERROR));
+					result.addError(error);
+				}
+			}
+		}
+		return result;
 	}
 
 	/**
