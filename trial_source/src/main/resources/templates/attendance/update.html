@@ -7,6 +7,14 @@
 </head>
 
 <body>
+
+	<!--	ここにエラーメッセージを書く-->
+	<ul>
+		<li th:each="message : ${errorMessages}">
+			<span th:text="${message}"></span>
+		</li>
+	</ul>
+
 	<th:block th:if="${session.loginUserDto.role == '0001'}">
 		<h2>勤怠管理</h2>
 	</th:block>
@@ -55,40 +63,44 @@
 								<td class="w300">[[${dailyAttendanceForm.sectionName}]]</td>
 								<td class="w70">
 									<div class="flexbox">
-									<select th:name="|attendanceList[${stat.index}].trainingStartTimeHour|" class="form-control">
-										<option th:each="timeHour : ${attendanceForm.timeHour}"
-											th:value="${timeHour.value}" th:inlne="text" class="form-control"
-											th:selected="${timeHour.key == dailyAttendanceForm.trainingStartTimeHour}">
-											[[${timeHour.value}]]
-										</option>
-									</select>
-									:
-									<select th:name="|attendanceList[${stat.index}].trainingStartTimeMinute|" class="form-control">
-										<option th:each="timeMinute : ${attendanceForm.timeMinute}"
-											th:value="${timeMinute.value}" th:inlne="text" class="form-control"
-											th:selected="${timeMinute.key == dailyAttendanceForm.trainingStartTimeMinute}">
-											[[${timeMinute.value}]]
-										</option>
-									</select>
+										<select th:name="|attendanceList[${stat.index}].trainingStartTimeHour|"
+											class="form-control">
+											<option th:each="timeHour : ${attendanceForm.timeHour}"
+												th:value="${timeHour.value}" th:inlne="text" class="form-control"
+												th:selected="${timeHour.key == dailyAttendanceForm.trainingStartTimeHour}">
+												[[${timeHour.value}]]
+											</option>
+										</select>
+										:
+										<select th:name="|attendanceList[${stat.index}].trainingStartTimeMinute|"
+											class="form-control">
+											<option th:each="timeMinute : ${attendanceForm.timeMinute}"
+												th:value="${timeMinute.value}" th:inlne="text" class="form-control"
+												th:selected="${timeMinute.key == dailyAttendanceForm.trainingStartTimeMinute}">
+												[[${timeMinute.value}]]
+											</option>
+										</select>
 									</div>
 								</td>
 								<td class="w70">
 									<div class="flexbox">
-									<select th:name="|attendanceList[${stat.index}].trainingEndTimeHour|" class="form-control">
-										<option th:each="timeHour : ${attendanceForm.timeHour}"
-											th:value="${timeHour.value}" th:inlne="text" class="form-control"
-											th:selected="${timeHour.key == dailyAttendanceForm.trainingEndTimeHour}">
-											[[${timeHour.value}]]
-										</option>
-									</select>
-									:
-									<select th:name="|attendanceList[${stat.index}].trainingEndTimeMinute|" class="form-control">
-										<option th:each="timeMinute : ${attendanceForm.timeMinute}"
-											th:value="${timeMinute.value}" th:inlne="text" class="form-control"
-											th:selected="${timeMinute.key == dailyAttendanceForm.trainingEndTimeMinute}">
-											[[${timeMinute.value}]]
-										</option>
-									</select>
+										<select th:name="|attendanceList[${stat.index}].trainingEndTimeHour|"
+											class="form-control">
+											<option th:each="timeHour : ${attendanceForm.timeHour}"
+												th:value="${timeHour.value}" th:inlne="text" class="form-control"
+												th:selected="${timeHour.key == dailyAttendanceForm.trainingEndTimeHour}">
+												[[${timeHour.value}]]
+											</option>
+										</select>
+										:
+										<select th:name="|attendanceList[${stat.index}].trainingEndTimeMinute|"
+											class="form-control">
+											<option th:each="timeMinute : ${attendanceForm.timeMinute}"
+												th:value="${timeMinute.value}" th:inlne="text" class="form-control"
+												th:selected="${timeMinute.key == dailyAttendanceForm.trainingEndTimeMinute}">
+												[[${timeMinute.value}]]
+											</option>
+										</select>
 									</div>
 								</td>
 								<td class="w80">
@@ -116,17 +128,17 @@
 					<th:block th:if="${session.loginUserDto.role != '0001'}">
 						<input type="submit" value="戻る" name="indexCompany" class="btn btn-default" />
 					</th:block>
-					<input type="submit" value="更新" name="complete" class="btn btn-info" id="updatebtn"/>
+					<input type="submit" value="更新" name="complete" class="btn btn-info" id="updatebtn" />
 				</div>
 
 			</form>
 		</div>
 	</div>
-	
-	
+
+
 	<script>
 		const update = document.getElementById("updatebtn");
-		update.addEventListener('click',function (){
+		update.addEventListener('click', function () {
 			window.confirm("更新します。よろしいですか？");
 		});
 	</script>

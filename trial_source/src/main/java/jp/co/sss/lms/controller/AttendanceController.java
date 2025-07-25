@@ -1,12 +1,15 @@
 package jp.co.sss.lms.controller;
 
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -15,6 +18,7 @@ import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.service.StudentAttendanceService;
 import jp.co.sss.lms.util.Constants;
+import jp.co.sss.lms.util.MessageUtil;
 
 /**
  * 勤怠管理コントローラ
@@ -29,6 +33,8 @@ public class AttendanceController {
 	private StudentAttendanceService studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
+	@Autowired
+	private MessageUtil messageUtil;
 
 	/**
 	 * 勤怠管理画面 初期表示
@@ -138,13 +144,19 @@ public class AttendanceController {
 		//入力チェック
 		result = studentAttendanceService.inputCheck(attendanceForm, result);
 		
+		//エラーの発生位置を確認する方法をどうにかしないといけない
+		//多分だけど入力チェックと同じ方法で配列位置を取得するプログラムを組む必要がある
+		
 		if(result.hasErrors()) {
-			// 勤怠管理リストの取得
-			List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
-					.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+			//エラーメッセージの取得
+			Set<String> errorMessages = new HashSet<String>();
+			for(ObjectError error : result.getAllErrors()) {
+				errorMessages.add(error.getDefaultMessage());
+			}
+			System.out.println("errorMessages:" + errorMessages.size());
 			// 勤怠フォームの生成
-			attendanceForm = studentAttendanceService
-					.setAttendanceForm(attendanceManagementDtoList);
+			attendanceForm = studentAttendanceService.setPullDown(attendanceForm);
+			model.addAttribute("errorMessages", errorMessages);
 			model.addAttribute("attendanceForm", attendanceForm);
 			return "attendance/update";
 		}
